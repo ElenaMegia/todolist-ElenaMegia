@@ -1,5 +1,6 @@
 package madstodolist.controller;
 
+import madstodolist.controller.exception.UsuarioNoLogeadoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +10,7 @@ import madstodolist.model.Usuario;
 import madstodolist.service.UsuarioService;
 import madstodolist.authentication.ManagerUserSession;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -28,6 +30,17 @@ public class HomeController {
         List<Usuario> listadototalusuarios= usuarioService.listadoDeUsuarios();
         model.addAttribute("usuarios", listadototalusuarios);
         return "usuarios";
+    }
+
+    @GetMapping("/usuarios/{id}")
+    public String desciprcionUsuario(@PathVariable(value = "id") Long idUser, Model model, HttpSession httpSession){
+        Usuario usuario=usuarioService.findById(idUser);
+        if(usuario==null){
+            throw new UsuarioNoLogeadoException();
+        }else{
+            model.addAttribute("usuario", usuario);
+        }
+        return "desciprcionUsuario";
     }
 
 }
