@@ -59,7 +59,9 @@ public class UsuarioService {
         return usuarioRepository.findById(usuarioId).orElse(null);
     }
 
+    @Transactional(readOnly = true)
     public List<Usuario> listadoDeUsuarios(){
+        logger.debug("Añadiendo todos los usuarios");
         List<Usuario> listausuarios=new ArrayList<>();
         //Creamos una lista y vamos introduciendo los usuarios de 1 en 1.
         for(Usuario usuario: usuarioRepository.findAll()){
